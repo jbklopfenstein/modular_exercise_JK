@@ -1,0 +1,243 @@
+change dir to your project dir, then:
+npm init
+==========
+test command:
+git repository:
+keywords:
+author: jeff
+license: (ISC)
+About to write to C:\Users\Jeff\Documents\workspace\JS-app-setup-npm\package.json:
+
+{
+  "name": "test-npm-project1",
+  "version": "1.0.0",
+  "description": "testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jeff",
+  "license": "ISC"
+}
+
+Is this ok? (yes)
+===================
+
+Scripts section ​
+Defines how to compile, test, and run your application. Let's focus on `start` for now.
+1. Create a simple index.js file
+console.log('my application just ran');
+2. Tell npm to run the index.js file with the start command.
+"scripts": {
+	  "test": "test",
+	  "start" : "node index.js"
+	 }
+3. Run your app by typing npm start in the command line
+
+===================
+C:\Users\Jeff\Documents\workspace\JS-app-setup-npm>npm start
+
+> test-npm-project1@1.0.0 start C:\Users\Jeff\Documents\workspace\JS-app-setup-npm
+> node index.js
+
+my application just ran
+
+C:\Users\Jeff\Documents\workspace\JS-app-setup-npm>
+
+=======================
+=====================
+=======================
+
+Dependency Management
+Developers create NPM packages, just like the one you just created and publish them to the NPM registry for others to use.
+
+These packages solve many common problems for you. Think of them as scripts you'd include on a webpage (like jQuery).
+
+You can browse a listing of those packages here:
+https://www.npmjs.com/
+
+Keep in mind, not all open source packages are created equal. When selecting a package to include in your project, look at the github repo for:
+
+Recent commits to prove it is being maintained.
+High number of stars as social proof that others like this package.
+
+============
+Install a Dependency
+From the commandline, use the `npm install some-cool-package` command to download and save a package. This will download the some-cool-package package and save it in the node_modules directory.
+
+Most of the time, you want to use `npm install --save some-cool-package`. This adds the package name to package.json. for example:
+
+---->   npm install moment --save
+
+Adds a section called "dependencies" to you package.json
+
+"dependencies": {
+	"moment": "^2.10.6"
+}
+
+=========
+Using your Dependencies
+You can now get access to the installed dependency by using a `require` statement.
+
+var Moment = require('moment');
+
+var a = new Moment();
+console.log(a.format('h:mm:ss a')); //logs the current time
+
+========
+Dependency Versions
+Notice that your dependencies specify a version number. Using compatible versions of dependencies is important. There are a number of ways to specify dependency versions:
+
+You can specify a specific version e.g. `2.10.6`
+Minimum version number `>=2.10.6`
+Tilde version `~2.10.6` includes this version and future patches. (up to but not including 2.11.0)
+Caret version `^2.10.6`includes all updates in the major version (up to but not including 3.0.0)
+
+========
+node_modules directory
+Contains all the modules you've downloaded from open source repositories.
+
+Is not checked in to source control
+Should be delete-able
+
+When someone (or something) downloads your package, they will need to run `npm install`. This will create a `node_modules` directory and download all the packages you've specified into it.
+
+=============
+node_modules directory
+In this way, the Package.json file has the following benefits:
+
+It serves as documentation for what packages your project depends on
+It allows you to specify the versions of a package that your project can use using semantic versioning rules
+Makes your build reproducible which means that its way easier to share with other developers.
+
+===========
+Dependencies vs devDependencies
+Some packages, like a web server are required for your app to run. Other packages, like linting or test tools are only required for developers. To save a package that doesn't need to be installed on the server, run `--save-dev`
+
+npm install lodash --save-dev
+
+Adds a section called "devDependencies" to you package.json
+
+"devDependencies": {
+	"lodash": "^3.10.1"
+}
+
+==============
+
+Uninstalling
+You can always manually edit your package.json and delete folders from node modules, but npm uninstall is more convenient:
+
+npm uninstall moment --save
+
+============
+
+Creating Your Own Modules
+When writing an application, you'll want to keep your code organized in modules.
+Modules allow for encapsulation (privacy)
+Makes your code easier to maintain
+Makes your code re-usable and composable.
+Modules should do one thing (single responsibility)
+
+To define a module, create a file and assign a value to the keyword module.exports. e.g.
+
+var myModule = {
+	sayHi: function(){
+		console.log('hi');
+	}
+}
+
+module.exports = myModule;
+
+=============
+!!!!!!!!!!!!!!!!
+Encapsulation
+For a module, being able to hide variables and state and only exposing a deliberate API to its consumers is important. Modules let you achieve this.
+
+var myGreeting = "hi"; //Private!
+
+var myModule = {
+	sayHi: function(name){
+		console.log(myGreeting + ' ' + name);
+	}
+}
+
+module.exports = myModule;
+
+===================================================================
+
+Intro to Testing
+Real applications need automated tests, and JS apps are no different. There are many open source assertion frameworks and test runners that let you test your code.
+
+Assertion Framework
+An assertion framework simply lets you test if something is true, false, equal, etc and throw an error if its not. Let's use the 'assert' package.
+
+npm install assert --save-dev
+
+Create a directory called 'test' with a `test.js` file. In that file create a test suite
+
+var assert = require('assert');
+
+assert(true);
+assert(false);
+});
+
+=============
+npm test
+Remember the scripts section of on package.json file? It specifies how to run your tests.
+
+"scripts": {
+    "test": "node test/test.js",
+    "start": "node index.js"
+  },
+
+  Run `npm test` and your script runs
+
+============
+Test Runner
+A test runner manages all the work around running your tests like defining your test suites, and performing setup tasks. Let's use 'Mocha' for now.
+Install Mocha
+
+npm install mocha --save-dev
+
+Update test.js to use a Mocha test suite
+
+var assert = require('assert');
+
+describe('Array', function() {
+  describe('#indexOf()', function () {
+    it('should return -1 when the value is not present', function () {
+      assert.equal(-1, [1,2,3].indexOf(2));
+      assert.equal(-1, [1,2,3].indexOf(0));
+    });
+  });
+});
+
+============
+Test Runner
+Update the `npm test` script to run mocha. (Note, mocha knows to look for your tests in /test/test.js by default, but you can configure it otherwise).
+
+"scripts": {
+    "test": "mocha",
+    "start": "node index.js"
+  },
+
+  Run the test
+
+  npm test
+
+  ===========
+Testing Async code
+A lot of our code in JS is going to be asynchronous. Luckily, promises make testing async code easy. Simply return the promise
+
+var dataModule = require('../dataModule.js');
+
+var assert = require('assert');
+describe('DataModule', function() {     //<------ "describe" is used by mocha to know what you're testing
+    it('should return the right data', function () {       //it is used for you, to know describe your test.. the describe function can have multiple "it" clauses.)
+      return dataModule.getTodos().then(function(todo){
+        assert(post);             // <----- "assert" basically compares response received to actual, and returns a boolean.  If matches, then passes.  If not, then fails.
+      })
+    });
+});
+
+=============

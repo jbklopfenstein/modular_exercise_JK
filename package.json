@@ -1,0 +1,22 @@
+{
+  "name": "test-npm-project1",
+  "version": "1.0.0",
+  "description": "testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.19.1",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
+    "assert": "^1.4.1",
+    "lodash": "^4.17.4",
+    "mocha": "^4.0.1"
+  }
+}
